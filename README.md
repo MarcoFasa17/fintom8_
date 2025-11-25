@@ -1,22 +1,25 @@
 <!-- Chosen Palette: Warm Neutral Harmony -->
-<!-- Application Structure Plan: Dashboard Layout. The SPA is structured around a fixed left sidebar (Navigation/Status) and a main scrollable content area divided into three logical, thematic modules: 1. Agent Configuration (Core Identity), 2. Setup Progress (Prerequisites Checklist), and 3. Security Guide (Interactive .env/.gitignore). This structure was chosen because the report's content is primarily procedural (setup steps) and metadata (agent specs). The dashboard design transforms the passive checklist into an active, status-driven interface, improving user understanding and task completion tracking. -->
-<!-- Visualization & Content Choices: Summary: Agent Configuration -> Goal: Inform -> Viz/Presentation Method: Key Stats Cards -> Interaction: Click to copy Agent Name -> Justification: Quick reference and utility. Library/Method: HTML/Tailwind/JS. | Report Info: Model/Tools -> Goal: Compare/Proportion -> Viz/Presentation Method: Donut Chart -> Interaction: Hover tooltip -> Justification: Visually represents the agent's minimal complexity (0 tools). Library/Method: Chart.js/Canvas. | Report Info: Prerequisites -> Goal: Organize/Status -> Viz/Presentation Method: Interactive Checklist -> Interaction: Click to toggle completion status -> Justification: Encourages user to track setup steps. Library/Method: HTML/JS. | Report Info: Security Setup -> Goal: Organize/Explain -> Viz/Presentation Method: Tabbed Code Viewer -> Interaction: Click to switch between .env and .gitignore code -> Justification: Hides complex config until needed. Library/Method: HTML/JS. -->
-<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+<!-- Application Structure Plan: Dashboard Layout. The SPA is structured around a fixed left sidebar (Navigation/Status) and a main scrollable content area divided into three logical, thematic modules: 1. Agent Configuration (Core Identity), 2. Setup Progress (Prerequisites Checklist), and 3. Security Guide (Interactive .env/.gitignore). -->
+<!-- Visualization & Content Choices: Agent Configuration: Key Stats Cards. Setup Progress: Interactive Checklist and Donut Chart (Chart.js). Security Setup: Tabbed Code Viewer. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ADK Project Status Dashboard</title>
+    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Chart.js for visualization -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <!-- Load Inter font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-text: #1F2937;
-            --background-light: #F9FAFB;
-            --accent-blue: #2563EB;
-            --border-color: #E5E7EB;
+            /* Warm Neutral Harmony Palette */
+            --primary-text: #1F2937; /* Dark Gray */
+            --background-light: #F9FAFB; /* Very Light Gray */
+            --accent-blue: #2563EB; /* Bright Blue for focus */
+            --border-color: #E5E7EB; /* Light Border */
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -24,7 +27,7 @@
             color: var(--primary-text);
         }
         .sidebar {
-            width: 16rem; /* 256px */
+            width: 16rem; /* Fixed width for desktop */
             min-height: 100vh;
             background-color: #FFFFFF;
             border-right: 1px solid var(--border-color);
@@ -51,6 +54,16 @@
             color: var(--accent-blue);
             font-weight: 600;
         }
+        /* Styling for the checkbox container to ensure the whole div is clickable */
+        .checklist-item {
+            transition: background-color 0.15s;
+        }
+        .checklist-item:hover {
+            background-color: #f3f4f6;
+        }
+        .checklist-item input[type="checkbox"] {
+            pointer-events: none; /* Prevents checkbox itself from intercepting the click */
+        }
     </style>
 </head>
 <body class="flex min-h-screen">
@@ -60,16 +73,16 @@
         <div class="text-xl font-bold mb-8 text-gray-800">ADK Project Fintom8</div>
         <nav class="flex flex-col space-y-2">
             <a href="#config" class="nav-link flex items-center p-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition duration-150">
-                <span>&#x1F916;</span> Agent Config
+                <span>🤖</span> Agent Config
             </a>
             <a href="#setup" class="nav-link flex items-center p-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition duration-150">
-                <span>&#x2705;</span> Setup Progress
+                <span>✅</span> Setup Progress
             </a>
             <a href="#security" class="nav-link flex items-center p-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition duration-150">
-                <span>&#x1F512;</span> Security Guide
+                <span>🔒</span> Security Guide
             </a>
             <a href="#verification" class="nav-link flex items-center p-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition duration-150">
-                <span>&#x1F3A5;</span> Verification
+                <span>🎥</span> Verification
             </a>
         </nav>
 
@@ -126,31 +139,31 @@
                 <!-- Setup Checklist -->
                 <div id="setup-checklist" class="flex flex-col space-y-3">
                     <!-- Python Prerequisite -->
-                    <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-100" onclick="toggleChecklistItem(this, 'status-display')">
+                    <div class="checklist-item flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer" onclick="toggleChecklistItem(this)">
                         <input type="checkbox" id="check-python" class="form-checkbox h-5 w-5 text-blue-600 rounded">
                         <label for="check-python" class="text-gray-800 flex-grow">Install/Verify Python 3.9+</label>
                         <span class="text-sm font-medium text-gray-500">Prerequisite</span>
                     </div>
                     <!-- google-genai -->
-                    <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-100" onclick="toggleChecklistItem(this, 'status-display')">
+                    <div class="checklist-item flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer" onclick="toggleChecklistItem(this)">
                         <input type="checkbox" id="check-genai" class="form-checkbox h-5 w-5 text-blue-600 rounded">
-                        <label for="check-genai" class="text-gray-800 flex-grow">Install `google-genai` library</label>
+                        <label for="check-genai" class="text-gray-800 flex-grow">Install `google-genai` library (`pip install google-genai`)</label>
                         <span class="text-sm font-medium text-gray-500">Library</span>
                     </div>
                     <!-- python-dotenv -->
-                    <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-100" onclick="toggleChecklistItem(this, 'status-display')">
+                    <div class="checklist-item flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer" onclick="toggleChecklistItem(this)">
                         <input type="checkbox" id="check-dotenv" class="form-checkbox h-5 w-5 text-blue-600 rounded">
-                        <label for="check-dotenv" class="text-gray-800 flex-grow">Install `python-dotenv`</label>
+                        <label for="check-dotenv" class="text-gray-800 flex-grow">Install `python-dotenv` (`pip install python-dotenv`)</label>
                         <span class="text-sm font-medium text-gray-500">Library</span>
                     </div>
                     <!-- API Key Setup -->
-                    <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-100" onclick="toggleChecklistItem(this, 'status-display')">
+                    <div class="checklist-item flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer" onclick="toggleChecklistItem(this)">
                         <input type="checkbox" id="check-key" class="form-checkbox h-5 w-5 text-blue-600 rounded">
                         <label for="check-key" class="text-gray-800 flex-grow">Configure `GEMINI_API_KEY` in `.env`</label>
                         <span class="text-sm font-medium text-red-500">CRITICAL</span>
                     </div>
                     <!-- Execution -->
-                    <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-100" onclick="toggleChecklistItem(this, 'status-display')">
+                    <div class="checklist-item flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer" onclick="toggleChecklistItem(this)">
                         <input type="checkbox" id="check-execute" class="form-checkbox h-5 w-5 text-blue-600 rounded">
                         <label for="check-execute" class="text-gray-800 flex-grow">Run the agent (e.g., `python run_agent.py`)</label>
                         <span class="text-sm font-medium text-gray-500">Final Step</span>
@@ -160,7 +173,7 @@
                 <!-- Model Complexity Donut Chart -->
                 <div class="chart-container bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
                     <canvas id="complexityChart"></canvas>
-                    <div class="text-center text-sm text-gray-500 mt-2">Agent Components Analysis (Total potential components: 4)</div>
+                    <div class="text-center text-sm text-gray-500 mt-2">Agent Components Analysis (Total components tracked: 3)</div>
                 </div>
             </div>
         </section>
@@ -213,7 +226,7 @@ venv/
             <h2 class="text-2xl font-bold text-blue-800 mb-4">4. Project Verification</h2>
             <p class="text-blue-700 mb-6">Successful operation is proven by the demo video. Click below to confirm the agent's interaction in the ADK Web UI.</p>
             <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 transform hover:scale-[1.02]">
-                &#x1F3A5; View Demo Video (ADK_Demo.mp4)
+                🎥 View Demo Video (ADK_Demo.mp4)
             </button>
         </section>
 
@@ -224,6 +237,7 @@ venv/
     </div>
 
     <script>
+        // --- State Management ---
         const setupSteps = [
             { id: 'check-python', status: false },
             { id: 'check-genai', status: false },
@@ -232,18 +246,14 @@ venv/
             { id: 'check-execute', status: false }
         ];
 
-        // Data for the Donut Chart (Agent Complexity)
-        const COMPLEXITY_DATA = {
-            used: 2, // Agent Name, Core Instruction, Model (3 components used)
-            unused: 2 // Tools (0), More complex configuration (0)
-        };
+        // --- Utility Functions ---
 
         function updateCompletionStatus() {
             const completed = setupSteps.filter(step => step.status).length;
             const total = setupSteps.length;
-            const percentage = Math.round((completed / total) * 100);
             
             const statusText = document.getElementById('status-display');
+            
             if (completed === total) {
                 statusText.innerHTML = `<span class="text-green-600 font-semibold">Status: Complete!</span> (${completed}/${total} steps)`;
             } else if (completed > 0) {
@@ -253,13 +263,14 @@ venv/
             }
         }
 
-        function toggleChecklistItem(element, statusId) {
+        function toggleChecklistItem(element) {
             const checkbox = element.querySelector('input[type="checkbox"]');
-            const stepId = checkbox.id;
             
             // Toggle the visual state
             checkbox.checked = !checkbox.checked;
 
+            const stepId = checkbox.id;
+            
             // Update the internal state array
             const stepIndex = setupSteps.findIndex(step => step.id === stepId);
             if (stepIndex !== -1) {
@@ -268,9 +279,9 @@ venv/
             }
         }
 
-        function copyToClipboard(text, statusElementId) {
-            document.execCommand('copy'); 
+        function showCopyStatus(statusElementId) {
             const statusEl = document.getElementById(statusElementId);
+            if (!statusEl) return;
             statusEl.classList.remove('opacity-0');
             statusEl.classList.add('opacity-100');
             setTimeout(() => {
@@ -279,15 +290,51 @@ venv/
             }, 1500);
         }
 
+        // Corrected copy function using document.execCommand for iFrame compatibility
+        function copyToClipboard(text, statusElementId) {
+            // 1. Create a temporary textarea element to hold the text
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            
+            // 2. Make it invisible and append it to the document body
+            textArea.style.position = "fixed";
+            textArea.style.opacity = "0";
+            document.body.appendChild(textArea);
+            
+            // 3. Select the text in the textarea
+            textArea.focus();
+            textArea.select();
+            
+            // 4. Execute the copy command
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showCopyStatus(statusElementId);
+                } else {
+                    console.error('Copy command was unsuccessful.');
+                }
+            } catch (err) {
+                console.error('Error executing copy command: ', err);
+            }
+            
+            // 5. Clean up
+            document.body.removeChild(textArea);
+        }
+
+
         function showTab(tabId) {
+            // Hide all tab contents
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.add('hidden');
             });
+            // Show the selected tab content
             document.getElementById(tabId + '-content').classList.remove('hidden');
 
+            // Deactivate all tab buttons
             document.querySelectorAll('.tab-button').forEach(button => {
                 button.classList.remove('active');
             });
+            // Activate the clicked tab button
             document.querySelector(`.tab-button[onclick="showTab('${tabId}')"]`).classList.add('active');
         }
 
@@ -296,10 +343,11 @@ venv/
         function initChart() {
             const ctx = document.getElementById('complexityChart').getContext('2d');
             
+            // Agent components: Name, Instruction, Model (3 components used). Tools = 0.
             const data = {
-                labels: ['Simple Agent Configuration (3)', 'Tools (0)'],
+                labels: ['Basic Agent Config (3)', 'Tools (0)'],
                 datasets: [{
-                    data: [3, 0], // The agent uses Name, Instruction, and Model (3 total points). Tools = 0.
+                    data: [3, 0], 
                     backgroundColor: [
                         '#2563EB', // Blue
                         '#D1D5DB'  // Light Gray
@@ -318,13 +366,16 @@ venv/
                         legend: {
                             position: 'bottom',
                             labels: {
-                                color: var(--primary-text)
+                                color: 'var(--primary-text)'
                             }
                         },
                         title: {
                             display: true,
                             text: 'Complexity: Basic Agent',
-                            color: var(--primary-text)
+                            color: 'var(--primary-text)',
+                            font: {
+                                weight: 'bold'
+                            }
                         },
                         tooltip: {
                             callbacks: {
@@ -334,7 +385,8 @@ venv/
                                         label += ': ';
                                     }
                                     if (context.parsed !== null) {
-                                        label += context.parsed + ' items';
+                                        // The data values are the first element of the array (3, 0)
+                                        label += context.raw + ' components';
                                     }
                                     return label;
                                 }
@@ -351,6 +403,8 @@ venv/
         document.addEventListener('DOMContentLoaded', () => {
             initChart();
             updateCompletionStatus();
+            // Ensure the correct tab is shown initially
+            showTab('env'); 
         });
     </script>
 </body>
