@@ -1,411 +1,131 @@
-<!-- Chosen Palette: Warm Neutral Harmony -->
-<!-- Application Structure Plan: Dashboard Layout. The SPA is structured around a fixed left sidebar (Navigation/Status) and a main scrollable content area divided into three logical, thematic modules: 1. Agent Configuration (Core Identity), 2. Setup Progress (Prerequisites Checklist), and 3. Security Guide (Interactive .env/.gitignore). -->
-<!-- Visualization & Content Choices: Agent Configuration: Key Stats Cards. Setup Progress: Interactive Checklist and Donut Chart (Chart.js). Security Setup: Tabbed Code Viewer. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADK Project Status Dashboard</title>
+    <title>ADK Agent Fintom8 - Styled Preview</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Chart.js for visualization -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
     <!-- Load Inter font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            /* Warm Neutral Harmony Palette */
-            --primary-text: #1F2937; /* Dark Gray */
-            --background-light: #F9FAFB; /* Very Light Gray */
-            --accent-blue: #2563EB; /* Bright Blue for focus */
-            --border-color: #E5E7EB; /* Light Border */
-        }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--background-light);
-            color: var(--primary-text);
+            background-color: #f7f9fb; /* Light background */
         }
-        .sidebar {
-            width: 16rem; /* Fixed width for desktop */
-            min-height: 100vh;
-            background-color: #FFFFFF;
-            border-right: 1px solid var(--border-color);
+        .container {
+            max-width: 800px;
         }
-        .chart-container {
-            /* Enforce responsive boundaries for Chart.js */
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 350px;
-            max-height: 400px; 
+        /* Custom styling for the header (like a GitHub README) */
+        .header-section {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
         }
-        .content-area {
-            max-width: 1200px;
-            width: 100%;
-        }
-        .shadow-custom {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-        }
-        .tab-button.active {
-            border-bottom: 2px solid var(--accent-blue);
-            color: var(--accent-blue);
-            font-weight: 600;
-        }
-        /* Styling for the checkbox container to ensure the whole div is clickable */
-        .checklist-item {
-            transition: background-color 0.15s;
-        }
-        .checklist-item:hover {
-            background-color: #f3f4f6;
-        }
-        .checklist-item input[type="checkbox"] {
-            pointer-events: none; /* Prevents checkbox itself from intercepting the click */
+        /* Styling for code blocks */
+        pre {
+            background-color: #1f2937; /* Dark background for code */
+            color: #d1fae5; /* Light green text */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 0.875rem;
         }
     </style>
 </head>
-<body class="flex min-h-screen">
-
-    <!-- Sidebar (Navigation & Status) -->
-    <div class="sidebar p-4 flex flex-col fixed top-0 left-0 bottom-0 z-10 hidden md:flex">
-        <div class="text-xl font-bold mb-8 text-gray-800">ADK Project Fintom8</div>
-        <nav class="flex flex-col space-y-2">
-            <a href="#config" class="nav-link flex items-center p-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition duration-150">
-                <span>🤖</span> Agent Config
-            </a>
-            <a href="#setup" class="nav-link flex items-center p-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition duration-150">
-                <span>✅</span> Setup Progress
-            </a>
-            <a href="#security" class="nav-link flex items-center p-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition duration-150">
-                <span>🔒</span> Security Guide
-            </a>
-            <a href="#verification" class="nav-link flex items-center p-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition duration-150">
-                <span>🎥</span> Verification
-            </a>
-        </nav>
-
-        <div class="mt-auto pt-6 border-t border-gray-200">
-            <div id="status-display" class="text-xs text-gray-500">Status: Initializing...</div>
+<body class="p-4 sm:p-8">
+    <div class="container mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
+        
+        <!-- Header Section -->
+        <div class="header-section p-6">
+            <h1 class="text-4xl font-extrabold text-gray-900 leading-tight">ADK Agent Fintom8</h1>
+            <p class="text-lg text-gray-600 mt-2">This project provides a basic implementation of a custom agent using the Google Agent Development Kit (ADK).</p>
         </div>
-    </div>
 
-    <!-- Main Content Area -->
-    <div class="flex-grow md:ml-[16rem] p-4 sm:p-8 content-area">
-        <header class="mb-10 pt-4 md:pt-0">
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2">Fintom8 ADK Project Dashboard</h1>
-            <p class="text-lg text-gray-600">Interactive exploration of the HelloAgent setup, configuration, and security processes.</p>
-        </header>
-
-        <!-- Module 1: Agent Configuration -->
-        <section id="config" class="mb-12 p-6 bg-white rounded-xl shadow-custom">
-            <h2 class="text-2xl font-bold border-b pb-3 mb-6 text-gray-800">1. Core Agent Identity</h2>
-            <p class="text-gray-600 mb-6">This section details the fundamental properties of the `HelloAgent`. It confirms the agent's identity, its core instruction set, and the underlying Gemini model being utilized. Understanding these details ensures the agent is correctly instantiated according to the project goal.</p>
+        <div class="p-6 sm:p-8 space-y-8">
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <!-- Agent Name Card -->
-                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200 shadow-sm transition hover:shadow-md cursor-pointer" onclick="copyToClipboard('HelloAgent', 'name-copy-status')">
-                    <div class="text-sm font-medium text-blue-700">Agent Name <span id="name-copy-status" class="text-xs ml-2 text-green-600 opacity-0 transition duration-300">Copied!</span></div>
-                    <div class="text-3xl font-extrabold text-blue-800 mt-1" id="agent-name">HelloAgent</div>
-                </div>
+            <!-- 1. Overview -->
+            <section>
+                <h2 class="text-2xl font-bold text-indigo-600 border-b pb-2 mb-4">1. Overview</h2>
+                <p class="text-gray-700 leading-relaxed">
+                    The <span class="font-semibold text-indigo-700">Fintom8</span> is a minimal Gemini-based agent designed to greet users and confirm its identity as the first successfully initialized ADK project. It uses the 
+                    <code class="bg-gray-100 p-1 rounded">gemini-2.0-flash</code> model and currently employs 
+                    <strong class="text-red-500">no tools</strong>, demonstrating a simple, foundational agent structure.
+                </p>
+            </section>
 
-                <!-- Model Card -->
-                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm">
-                    <div class="text-sm font-medium text-gray-700">Model Used</div>
-                    <div class="text-3xl font-extrabold text-gray-800 mt-1">gemini-2.0-flash</div>
-                </div>
+            <!-- 2. Getting Started -->
+            <section>
+                <h2 class="text-2xl font-bold text-indigo-600 border-b pb-2 mb-4">2. Getting Started</h2>
+                <p class="text-gray-700 mb-4">Follow these steps to set up your environment and run the agent.</p>
 
-                <!-- Tool Status Card -->
-                <div class="bg-red-50 p-4 rounded-lg border border-red-200 shadow-sm">
-                    <div class="text-sm font-medium text-red-700">Tools Enabled</div>
-                    <div class="text-3xl font-extrabold text-red-800 mt-1">None</div>
-                </div>
-            </div>
+                <h3 class="text-xl font-semibold mt-6 mb-3 text-gray-800">Prerequisites</h3>
+                <p class="text-gray-700 mb-2">You must have the following installed:</p>
+                <ul class="list-disc list-inside space-y-1 ml-4 text-gray-700">
+                    <li><strong>Python 3.9+</strong></li>
+                    <li><strong>Git</strong></li>
+                </ul>
 
-            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                <div class="text-sm font-medium text-gray-700 mb-2">Core Instruction</div>
-                <p class="text-gray-800 italic">"Greet the user warmly and confirm you are the result of their first Google ADK project."</p>
-            </div>
-        </section>
-
-        <!-- Module 2: Setup Status & Progress -->
-        <section id="setup" class="mb-12 p-6 bg-white rounded-xl shadow-custom">
-            <h2 class="text-2xl font-bold border-b pb-3 mb-6 text-gray-800">2. Setup Progress & Prerequisites</h2>
-            <p class="text-gray-600 mb-8">Track the required steps for successful local execution. Mark items complete as you verify your environment. The Donut Chart below visualizes the complexity (or simplicity) of the agent's construction.</p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                <h3 class="text-xl font-semibold mt-6 mb-3 text-gray-800">Installation</h3>
                 
-                <!-- Setup Checklist -->
-                <div id="setup-checklist" class="flex flex-col space-y-3">
-                    <!-- Python Prerequisite -->
-                    <div class="checklist-item flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer" onclick="toggleChecklistItem(this)">
-                        <input type="checkbox" id="check-python" class="form-checkbox h-5 w-5 text-blue-600 rounded">
-                        <label for="check-python" class="text-gray-800 flex-grow">Install/Verify Python 3.9+</label>
-                        <span class="text-sm font-medium text-gray-500">Prerequisite</span>
-                    </div>
-                    <!-- google-genai -->
-                    <div class="checklist-item flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer" onclick="toggleChecklistItem(this)">
-                        <input type="checkbox" id="check-genai" class="form-checkbox h-5 w-5 text-blue-600 rounded">
-                        <label for="check-genai" class="text-gray-800 flex-grow">Install `google-genai` library (`pip install google-genai`)</label>
-                        <span class="text-sm font-medium text-gray-500">Library</span>
-                    </div>
-                    <!-- python-dotenv -->
-                    <div class="checklist-item flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer" onclick="toggleChecklistItem(this)">
-                        <input type="checkbox" id="check-dotenv" class="form-checkbox h-5 w-5 text-blue-600 rounded">
-                        <label for="check-dotenv" class="text-gray-800 flex-grow">Install `python-dotenv` (`pip install python-dotenv`)</label>
-                        <span class="text-sm font-medium text-gray-500">Library</span>
-                    </div>
-                    <!-- API Key Setup -->
-                    <div class="checklist-item flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer" onclick="toggleChecklistItem(this)">
-                        <input type="checkbox" id="check-key" class="form-checkbox h-5 w-5 text-blue-600 rounded">
-                        <label for="check-key" class="text-gray-800 flex-grow">Configure `GEMINI_API_KEY` in `.env`</label>
-                        <span class="text-sm font-medium text-red-500">CRITICAL</span>
-                    </div>
-                    <!-- Execution -->
-                    <div class="checklist-item flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer" onclick="toggleChecklistItem(this)">
-                        <input type="checkbox" id="check-execute" class="form-checkbox h-5 w-5 text-blue-600 rounded">
-                        <label for="check-execute" class="text-gray-800 flex-grow">Run the agent (e.g., `python run_agent.py`)</label>
-                        <span class="text-sm font-medium text-gray-500">Final Step</span>
-                    </div>
-                </div>
+                <ol class="space-y-4">
+                    <!-- Step 1 -->
+                    <li class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <span class="font-medium text-gray-800">1. Clone the repository:</span>
+                        <pre>git clone [your-repo-link]
+cd project-fintom8</pre>
+                    </li>
+                    
+                    <!-- Step 2 -->
+                    <li class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <span class="font-medium text-gray-800">2. Install required Python libraries:</span>
+                        <p class="text-sm text-gray-600 mb-2">This project requires the Google GenAI SDK and <code class="bg-gray-200 p-1 rounded text-gray-700">python-dotenv</code> for secure secret handling.</p>
+                        <pre>pip install google-genai python-dotenv</pre>
+                    </li>
 
-                <!-- Model Complexity Donut Chart -->
-                <div class="chart-container bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                    <canvas id="complexityChart"></canvas>
-                    <div class="text-center text-sm text-gray-500 mt-2">Agent Components Analysis (Total components tracked: 3)</div>
-                </div>
-            </div>
-        </section>
+                    <!-- Step 3 -->
+                    <li class="bg-red-50 p-4 rounded-lg border border-red-200">
+                        <span class="font-medium text-red-800">3. Secure API Key Configuration</span>
+                        <p class="text-sm text-red-700 mb-2">You must configure your Gemini API key in a secure environment file.</p>
+                        <ul class="list-disc list-inside ml-4 text-red-700 mb-2 text-sm">
+                            <li>Create a file named <strong>.env</strong> in the root directory of the project.</li>
+                            <li>Add your API key using the exact variable name below:</li>
+                        </ul>
+                        <pre class="bg-red-800 text-yellow-300">GEMINI_API_KEY=YOUR_API_KEY_HERE</pre>
+                        <p class="text-xs text-red-700 mt-2">Replace <code class="bg-red-200 p-1 rounded text-red-800">YOUR_API_KEY_HERE</code> with your actual key.</p>
+                    </li>
+                </ol>
+            </section>
 
-        <!-- Module 3: Security & Workflow Guide -->
-        <section id="security" class="mb-12 p-6 bg-white rounded-xl shadow-custom">
-            <h2 class="text-2xl font-bold border-b pb-3 mb-6 text-gray-800">3. Secure Configuration Guide</h2>
-            <p class="text-gray-600 mb-6">Security is paramount. The following tabs provide the required setup for API key storage (`.env`) and preventing accidental commits (`.gitignore`).</p>
+            <!-- 3. Usage -->
+            <section>
+                <h2 class="text-2xl font-bold text-indigo-600 border-b pb-2 mb-4">3. Usage</h2>
+                <p class="text-gray-700 mb-3">To run the agent and interact with it, execute the primary agent script:</p>
+                <pre>python run_agent.py</pre>
+            </section>
 
-            <!-- Tabs -->
-            <div class="flex border-b border-gray-200 mb-4">
-                <button class="tab-button active p-3 mr-4 text-gray-600 transition duration-150" onclick="showTab('env')">.env File (Secret Storage)</button>
-                <button class="tab-button p-3 text-gray-600 transition duration-150" onclick="showTab('gitignore')">.gitignore (Exclusions)</button>
-            </div>
-
-            <!-- Tab Content -->
-            <div id="env-content" class="tab-content">
-                <h3 class="text-lg font-semibold mb-3 text-gray-800">`1. .env` Setup</h3>
-                <p class="text-gray-600 mb-3">This file stores the `GEMINI_API_KEY` securely. **Never** include your actual key in the content below.</p>
-                <div class="bg-gray-800 text-green-400 p-4 rounded-lg text-sm overflow-x-auto">
-                    <pre>GEMINI_API_KEY=YOUR_API_KEY_HERE</pre>
-                </div>
-            </div>
-
-            <div id="gitignore-content" class="tab-content hidden">
-                <h3 class="text-lg font-semibold mb-3 text-gray-800">`2. .gitignore` Essentials</h3>
-                <p class="text-gray-600 mb-3">This file prevents Git from tracking the secret `.env` file, virtual environments, and other temporary files.</p>
-                <div class="bg-gray-800 text-green-400 p-4 rounded-lg text-sm overflow-x-auto">
-                    <pre>
-# Environment and Configuration Secrets
+            <!-- 4. Security Note (.gitignore) -->
+            <section>
+                <h2 class="text-2xl font-bold text-indigo-600 border-b pb-2 mb-4">4. Security Note (.gitignore)</h2>
+                <p class="text-gray-700 mb-3">To prevent accidental public exposure of your secret key, ensure your <code class="bg-gray-100 p-1 rounded">.gitignore</code> file includes the following essential entries:</p>
+                <pre># Environment and Configuration Secrets
 .env
 *.env
-*.secrets
 
-# General Python Files
-__pycache__/
+# Python Virtual Environment
 venv/
-.venv/
-*.pyc
+.venv/</pre>
+            </section>
 
-# Large Files
-*.mp4
-                    </pre>
-                </div>
-            </div>
-        </section>
+            <!-- 5. Contact -->
+            <section>
+                <h2 class="text-2xl font-bold text-indigo-600 border-b pb-2 mb-4">5. Contact</h2>
+                <p class="text-gray-700">For technical assistance or questions about the agent's core function, please refer to the project author.</p>
+            </section>
+        </div>
         
-        <!-- Module 4: Verification -->
-        <section id="verification" class="mb-12 p-6 bg-blue-50 rounded-xl border border-blue-200 shadow-custom text-center">
-            <h2 class="text-2xl font-bold text-blue-800 mb-4">4. Project Verification</h2>
-            <p class="text-blue-700 mb-6">Successful operation is proven by the demo video. Click below to confirm the agent's interaction in the ADK Web UI.</p>
-            <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300 transform hover:scale-[1.02]">
-                🎥 View Demo Video (ADK_Demo.mp4)
-            </button>
-        </section>
-
-        <footer class="text-center text-sm text-gray-500 mt-10 p-4 border-t border-gray-200">
-            Fintom8 ADK Project Dashboard | Information Architecture by Expert AI | Prepared by: Marco Fasa
+        <footer class="p-4 sm:p-6 bg-gray-50 text-center text-sm text-gray-500 border-t rounded-b-xl">
+            Styled for optimal preview using Tailwind CSS and the Inter font.
         </footer>
-
     </div>
-
-    <script>
-        // --- State Management ---
-        const setupSteps = [
-            { id: 'check-python', status: false },
-            { id: 'check-genai', status: false },
-            { id: 'check-dotenv', status: false },
-            { id: 'check-key', status: false },
-            { id: 'check-execute', status: false }
-        ];
-
-        // --- Utility Functions ---
-
-        function updateCompletionStatus() {
-            const completed = setupSteps.filter(step => step.status).length;
-            const total = setupSteps.length;
-            
-            const statusText = document.getElementById('status-display');
-            
-            if (completed === total) {
-                statusText.innerHTML = `<span class="text-green-600 font-semibold">Status: Complete!</span> (${completed}/${total} steps)`;
-            } else if (completed > 0) {
-                statusText.innerHTML = `<span class="text-yellow-600 font-semibold">Status: In Progress...</span> (${completed}/${total} steps)`;
-            } else {
-                statusText.innerHTML = `Status: Initializing... (0/${total} steps)`;
-            }
-        }
-
-        function toggleChecklistItem(element) {
-            const checkbox = element.querySelector('input[type="checkbox"]');
-            
-            // Toggle the visual state
-            checkbox.checked = !checkbox.checked;
-
-            const stepId = checkbox.id;
-            
-            // Update the internal state array
-            const stepIndex = setupSteps.findIndex(step => step.id === stepId);
-            if (stepIndex !== -1) {
-                setupSteps[stepIndex].status = checkbox.checked;
-                updateCompletionStatus();
-            }
-        }
-
-        function showCopyStatus(statusElementId) {
-            const statusEl = document.getElementById(statusElementId);
-            if (!statusEl) return;
-            statusEl.classList.remove('opacity-0');
-            statusEl.classList.add('opacity-100');
-            setTimeout(() => {
-                statusEl.classList.remove('opacity-100');
-                statusEl.classList.add('opacity-0');
-            }, 1500);
-        }
-
-        // Corrected copy function using document.execCommand for iFrame compatibility
-        function copyToClipboard(text, statusElementId) {
-            // 1. Create a temporary textarea element to hold the text
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            
-            // 2. Make it invisible and append it to the document body
-            textArea.style.position = "fixed";
-            textArea.style.opacity = "0";
-            document.body.appendChild(textArea);
-            
-            // 3. Select the text in the textarea
-            textArea.focus();
-            textArea.select();
-            
-            // 4. Execute the copy command
-            try {
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    showCopyStatus(statusElementId);
-                } else {
-                    console.error('Copy command was unsuccessful.');
-                }
-            } catch (err) {
-                console.error('Error executing copy command: ', err);
-            }
-            
-            // 5. Clean up
-            document.body.removeChild(textArea);
-        }
-
-
-        function showTab(tabId) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.add('hidden');
-            });
-            // Show the selected tab content
-            document.getElementById(tabId + '-content').classList.remove('hidden');
-
-            // Deactivate all tab buttons
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.classList.remove('active');
-            });
-            // Activate the clicked tab button
-            document.querySelector(`.tab-button[onclick="showTab('${tabId}')"]`).classList.add('active');
-        }
-
-
-        // Chart Initialization
-        function initChart() {
-            const ctx = document.getElementById('complexityChart').getContext('2d');
-            
-            // Agent components: Name, Instruction, Model (3 components used). Tools = 0.
-            const data = {
-                labels: ['Basic Agent Config (3)', 'Tools (0)'],
-                datasets: [{
-                    data: [3, 0], 
-                    backgroundColor: [
-                        '#2563EB', // Blue
-                        '#D1D5DB'  // Light Gray
-                    ],
-                    hoverOffset: 4
-                }]
-            };
-
-            const config = {
-                type: 'doughnut',
-                data: data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: 'var(--primary-text)'
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: 'Complexity: Basic Agent',
-                            color: 'var(--primary-text)',
-                            font: {
-                                weight: 'bold'
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed !== null) {
-                                        // The data values are the first element of the array (3, 0)
-                                        label += context.raw + ' components';
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    }
-                }
-            };
-
-            new Chart(ctx, config);
-        }
-
-        // Initialize on load
-        document.addEventListener('DOMContentLoaded', () => {
-            initChart();
-            updateCompletionStatus();
-            // Ensure the correct tab is shown initially
-            showTab('env'); 
-        });
-    </script>
 </body>
 </html>
